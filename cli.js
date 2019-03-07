@@ -10,15 +10,14 @@ const {
 const pkg = require("./package.json");
 
 const codeup = require("./lib");
-const transportRegistry = require("./lib/transportRegistry");
 
 const errors = [];
 
 ;
 (async () => {
     try {
-        const transports = await transportRegistry.loadTransports();
-        const transportExists = transportRegistry.exists(argv.transport);
+        const transports = codeup.transportRegistry.transports;
+        const transportExists = codeup.transportRegistry.exists(argv.transport);
         const file = argv._[0]; // first only
         const transport = argv.transport ? argv.transport : "hasteb.in";
 
@@ -55,7 +54,7 @@ const errors = [];
             filetype: file.split(".").reverse()[0]
         };
 
-        const finalisedUrl = await codeup.run(transports[transport], code, options);
+        const finalisedUrl = await codeup.upload(transports[transport], code, options);
 
         console.log(finalisedUrl);
     } catch (err) {
